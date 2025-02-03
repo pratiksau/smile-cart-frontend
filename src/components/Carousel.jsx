@@ -10,15 +10,14 @@ export const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % IMAGE_URLS.length;
-    setCurrentIndex(nextIndex);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % IMAGE_URLS.length);
     console.log(currentIndex);
   };
 
   const handlePrevious = () => {
-    const previousIndex =
-      (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-    setCurrentIndex(previousIndex);
+    setCurrentIndex(
+      prevIndex => (prevIndex - 1 + imageUrls.length) % imageUrls.length
+    );
   };
 
   return (
