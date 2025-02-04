@@ -4,15 +4,12 @@ import classNames from "classnames";
 import { Left, Right } from "neetoicons";
 import { Button } from "neetoui";
 
-import { IMAGE_URLS } from "./constants";
-
 export const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const timeRef = useRef(null);
 
   const handleNext = () => {
-    setCurrentIndex(prevIndex => (prevIndex + 1) % IMAGE_URLS.length);
-    console.log(currentIndex);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % imageUrls.length);
   };
 
   const handlePrevious = () => {
