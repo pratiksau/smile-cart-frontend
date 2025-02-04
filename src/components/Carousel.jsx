@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import classNames from "classnames";
 import { Left, Right } from "neetoicons";
@@ -8,6 +8,7 @@ import { IMAGE_URLS } from "./constants";
 
 export const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const timeRef = useRef(null);
 
   const handleNext = () => {
     setCurrentIndex(prevIndex => (prevIndex + 1) % IMAGE_URLS.length);
@@ -18,12 +19,18 @@ export const Carousel = ({ imageUrls, title }) => {
     setCurrentIndex(
       prevIndex => (prevIndex - 1 + imageUrls.length) % imageUrls.length
     );
+    resetTimer();
+  };
+
+  const resetTimer = () => {
+    clearInterval(timeRef.current);
+    timeRef.current = setInterval(handleNext, 3000);
   };
 
   useEffect(() => {
-    const interval = setInterval(handleNext, 3000);
+    timeRef.current = setInterval(handleNext, 3000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(timeRef.current);
   }, []);
 
   return (
@@ -44,7 +51,10 @@ export const Carousel = ({ imageUrls, title }) => {
           className="shrink-0 focus-within:ring-0 hover:bg-transparent"
           icon={Right}
           style="text"
-          onClick={handleNext}
+          onClick={() => {
+            handleNext();
+            resetTimer();
+          }}
         />
       </div>
       <div className="flex space-x-1">
