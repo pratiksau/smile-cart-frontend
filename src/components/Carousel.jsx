@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import classNames from "classnames";
 import { Left, Right } from "neetoicons";
@@ -19,6 +19,12 @@ export const Carousel = ({ imageUrls, title }) => {
       prevIndex => (prevIndex - 1 + imageUrls.length) % imageUrls.length
     );
   };
+
+  useEffect(() => {
+    const interval = setInterval(handleNext, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
