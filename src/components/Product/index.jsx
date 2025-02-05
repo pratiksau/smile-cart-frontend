@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import productsApi from "apis/products";
+import AddToCart from "components/commons/AddToCart";
 import Header from "components/commons/Header";
 import { Spinner, Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
@@ -68,6 +69,7 @@ export const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discountPercentage}% off
           </Typography>
+          <AddToCart {...{ slug }} />
         </div>
       </div>
     </div>
