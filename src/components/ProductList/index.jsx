@@ -6,10 +6,11 @@ import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, Spinner, NoData } from "neetoui";
 import { isEmpty } from "ramda";
+import withTitle from "utils/withTitle";
 
 import ProductListItem from "./ProductListItem";
 
-export const ProductList = () => {
+const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
@@ -65,3 +66,5 @@ export const ProductList = () => {
     </div>
   );
 };
+
+export default withTitle(ProductList);

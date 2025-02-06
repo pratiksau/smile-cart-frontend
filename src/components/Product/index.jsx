@@ -8,12 +8,14 @@ import { Button, Spinner, Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
+import i18n from "src/common/i18n";
+import withTitle from "utils/withTitle";
 
 import { Carousel } from "./Carousel";
 
 import PageNotFound from "../commons/PageNotFound";
 
-export const Product = () => {
+const Product = () => {
   const { slug } = useParams();
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
   const [product, setProduct] = useState({});
@@ -95,3 +97,5 @@ export const Product = () => {
     </div>
   );
 };
+
+export default withTitle(Product, i18n.t("product"));
