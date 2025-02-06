@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-
-import productsApi from "apis/products";
 import AddToCart from "components/commons/AddToCart";
 import Header from "components/commons/Header";
 import useSelectedQuantity from "components/hooks/useSelectedQuantity";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Button, Spinner, Typography } from "neetoui";
-import { append, isNotNil } from "ramda";
+import { isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
 import i18n from "src/common/i18n";
@@ -18,24 +16,8 @@ import PageNotFound from "../commons/PageNotFound";
 const Product = () => {
   const { slug } = useParams();
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
-  const fetchProduct = async () => {
-    try {
-      const product = await productsApi.show(slug);
-      setProduct(product);
-    } catch {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProduct();
-  }, []);
+  const { data: product = {}, isLoading, isError } = useShowProduct(slug);
 
   const {
     name,
@@ -65,10 +47,7 @@ const Product = () => {
       <div className="mt-6 flex gap-4">
         <div className="w-2/5">
           {isNotNil(imageUrls) ? (
-            <Carousel
-              imageUrls={append(imageUrl, imageUrls)} //append(val, list)
-              title={name}
-            />
+            <Carousel />
           ) : (
             <img alt={name} className="w-48" src={imageUrl} />
           )}
