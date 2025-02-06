@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import { VALID_COUNT_REGEX } from "components/constants";
 import useSelectedQuantity from "components/hooks/useSelectedQuantity";
-import { Button, Input } from "neetoui";
+import { Button, Input, Toastr } from "neetoui";
 
 import TooltipWrapper from "./TooltipWrapper";
 
@@ -22,9 +22,9 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
     const parsedValue = parseInt(value) || 0;
     const isNotValidQuantity = parsedValue > availableQuantity;
     if (isNotValidQuantity) {
-      // Toastr.error(`Only ${availableQuantity} units are available`, {
-      //   autoClose: 2000,
-      // });
+      Toastr.error(`Only ${availableQuantity} units are available`, {
+        autoClose: 2000,
+      });
       setSelectedQuantity(availableQuantity);
       countInputFocus.current.blur();
     } else if (VALID_COUNT_REGEX.test(value)) {
