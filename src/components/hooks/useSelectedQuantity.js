@@ -1,5 +1,5 @@
 import { paths } from "ramda";
-import useCartItemsStore from "stores/useCartItemsStore";
+import { useCartItemsStore } from "stores/useCartItemsStore";
 import { shallow } from "zustand/shallow";
 
 const useSelectedQuantity = slug => {
