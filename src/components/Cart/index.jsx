@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
-
-import productsApi from "apis/products";
 import Header from "components/commons/Header";
 import PageLoader from "components/commons/PageLoader";
 import { MRP, OFFER_PRICE } from "components/constants";
 import { cartTotalOf } from "components/utils";
+import { useFetchCartProducts } from "hooks/reactQuery/useProductsApi";
 import i18n from "i18next";
-import { NoData, Toastr } from "neetoui";
+import { NoData } from "neetoui";
 import { keys, isEmpty } from "ramda";
+import { useTranslation } from "react-i18next";
 import { useCartItemsStore } from "stores/useCartItemsStore";
 import withTitle from "utils/withTitle";
 
@@ -15,41 +14,10 @@ import PriceCard from "./PriceCard";
 import ProductCard from "./ProductCard";
 
 const Cart = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
+  const { t } = useTranslation();
 
-  const slugs = keys(cartItems);
-  const fetchCartProducts = async () => {
-    try {
-      const responses = await Promise.all(
-        slugs.map(slug => productsApi.show(slug))
-      );
-
-      setProducts(responses);
-      responses.forEach(({ availableQuantity, name, slug }) => {
-        if (availableQuantity >= cartItems[slug]) return;
-
-        setSelectedQuantity(slug, availableQuantity);
-        if (availableQuantity === 0) {
-          Toastr.error(
-            `${name} is no longer available and has been removed from cart`,
-            {
-              autoClose: 2000,
-            }
-          );
-        }
-      });
-    } catch (error) {
-      console.log("An error occurred:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartProducts();
-  }, [cartItems]);
+  const slugs = useCartItemsStore(store => keys(store.cartItems));
+  const { data: products = [], isLoading } = useFetchCartProducts(slugs);
 
   const totalMrp = cartTotalOf(products, MRP);
   const totalOfferPrice = cartTotalOf(products, OFFER_PRICE);
@@ -61,7 +29,7 @@ const Cart = () => {
       <>
         <Header title="My Cart" />
         <div className="flex h-screen items-center justify-center">
-          <NoData title="Your cart is empty!" />
+          <NoData title={t("cart.empty")} />
         </div>
       </>
     );
